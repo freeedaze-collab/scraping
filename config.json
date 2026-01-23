@@ -33,5 +33,5 @@
   "storage_state": "output/storage_state.json",
   "user_data_dir": "output/chrome_profile",
   "browser_channel": "chrome",
-  "manual_login": false
+  "manual_login": true
 }
