@@ -1,0 +1,37 @@
+{
+  "login_url": "https://affiliates.bet88.ph/",
+  "players_url": "https://affiliates.bet88.ph/players",
+  "username": "info@bmp-ph.com",
+  "password": "hfsddsdd1",
+  "selectors": {
+    "username_input": "input[name='email']",
+    "password_input": "input[name='password']",
+    "submit_button": "button[type='submit']",
+    "rows_xpath": "//*[@id='kt_billing_months']/div/table/tbody/tr",
+    "columns": {
+      "player_id": "td:nth-child(1) span.text-gray-600",
+      "player_tag": "td:nth-child(1) span.text-muted",
+      "date_relative": "td:nth-child(3) span.text-gray-600",
+      "date_absolute": "td:nth-child(3) span.text-muted",
+      "cpa_deposit": "td:nth-child(4) span",
+      "cpa_turnover": "td:nth-child(5) span",
+      "cpa_payout": "td:nth-child(6) span"
+    }
+  },
+  "pagination": {
+    "next_button_selector": "button[aria-label='Next']",
+    "disabled_attribute": "disabled"
+  },
+  "sheet": {
+    "enabled": false,
+    "sheet_url": "https://docs.google.com/spreadsheets/d/your_sheet_id_here/edit",
+    "worksheet": "Sheet1",
+    "mode": "replace",
+    "credentials_json": "credentials/service_account.json"
+  },
+  "output_csv": "output/players.csv",
+  "storage_state": "output/storage_state.json",
+  "user_data_dir": "output/chrome_profile",
+  "browser_channel": "chrome",
+  "manual_login": true
+}
