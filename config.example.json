@@ -29,6 +29,5 @@
     "mode": "replace",
     "credentials_json": "credentials/service_account.json"
   },
-  "output_csv": "output/players.csv",
-  "storage_state": "output/storage_state.json"
+  "output_csv": "output/players.csv"
 }
