@@ -29,33 +29,6 @@ Use `--headful` when you want to watch the browser for debugging:
 python src/scrape_players.py --config config.json --headful
 ```
 
-## Bot check (Cloudflare) handling
-
-If the login page shows a bot check, run in headful mode and solve it once manually.
-Then the script can reuse the saved `storage_state` on future runs.
-
-1. Ensure `storage_state` is set in `config.json` (see `config.example.json`).
-2. Run with `--headful`, complete the bot check and login.
-3. The script will save the session to `storage_state` automatically.
-
-On subsequent runs, keep `storage_state` configured so the script reuses the session.
-
-If the bot check keeps reappearing, use a persistent Chrome profile so Cloudflare
-can keep the same browser fingerprint and cookies:
-
-1. Set `browser_channel` to `chrome` and `user_data_dir` to a writable folder.
-2. Run with `--headful` once and complete the bot check/login.
-3. Re-run without `--headful` to test headless.
-
-This makes the script behave closer to a normal Chrome session.
-
-If the login form still does not appear, enable manual login:
-
-1. Set `manual_login` to `true` in `config.json`.
-2. Run with `--headful`.
-3. A Playwright inspector will open; solve the bot check and login manually.
-4. Return to the terminal and press Enter to continue.
-
 ## Google Sheets export
 
 To write directly to Google Sheets:
