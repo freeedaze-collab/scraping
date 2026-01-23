@@ -44,9 +44,6 @@ class AppConfig:
     pagination: PaginationConfig
     sheet: SheetConfig
     output_csv: str
-    storage_state: Optional[str]
-    user_data_dir: Optional[str]
-    browser_channel: Optional[str]
 
 
 def load_config(path: Path) -> AppConfig:
@@ -80,9 +77,6 @@ def load_config(path: Path) -> AppConfig:
             credentials_json=sheet.get("credentials_json"),
         ),
         output_csv=raw.get("output_csv", "output/players.csv"),
-        storage_state=raw.get("storage_state"),
-        user_data_dir=raw.get("user_data_dir"),
-        browser_channel=raw.get("browser_channel"),
     )
 
 
@@ -101,39 +95,12 @@ def _extract_text(locator) -> str:
     return locator.first.inner_text().strip()
 
 
-def _wait_for_login_form(page, selector: str, headless: bool) -> None:
-    try:
-        timeout = 0 if not headless else 30000
-        page.wait_for_selector(selector, timeout=timeout)
-    except PlaywrightTimeoutError as exc:
-        raise PlaywrightTimeoutError(
-            "Login form did not appear. If you see a bot check (Cloudflare), "
-            "run with --headful and solve it manually, or reuse storage_state."
-        ) from exc
-
-
 def scrape_rows(config: AppConfig, headless: bool) -> List[Dict[str, str]]:
     rows_data: List[Dict[str, str]] = []
     with sync_playwright() as playwright:
-        launch_kwargs: Dict[str, Any] = {"headless": headless}
-        if config.browser_channel:
-            launch_kwargs["channel"] = config.browser_channel
-
-        if config.user_data_dir:
-            context = playwright.chromium.launch_persistent_context(
-                user_data_dir=config.user_data_dir,
-                **launch_kwargs,
-            )
-            page = context.new_page()
-        else:
-            browser = playwright.chromium.launch(**launch_kwargs)
-            context_kwargs: Dict[str, Any] = {}
-            if config.storage_state:
-                context_kwargs["storage_state"] = config.storage_state
-            context = browser.new_context(**context_kwargs)
-            page = context.new_page()
+        browser = playwright.chromium.launch(headless=headless)
+        page = browser.new_page()
         page.goto(config.login_url, wait_until="domcontentloaded")
-        _wait_for_login_form(page, config.selectors.username_input, headless=headless)
         page.fill(config.selectors.username_input, config.username)
         page.fill(config.selectors.password_input, config.password)
         page.click(config.selectors.submit_button)
@@ -172,11 +139,7 @@ def scrape_rows(config: AppConfig, headless: bool) -> List[Dict[str, str]]:
             except PlaywrightTimeoutError:
                 break
 
-        if config.storage_state and not config.user_data_dir:
-            context.storage_state(path=config.storage_state)
-        context.close()
-        if not config.user_data_dir:
-            browser.close()
+        browser.close()
     return rows_data
 
 

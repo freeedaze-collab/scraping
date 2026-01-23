@@ -29,8 +29,5 @@
     "mode": "replace",
     "credentials_json": "credentials/service_account.json"
   },
-  "output_csv": "output/players.csv",
-  "storage_state": "output/storage_state.json",
-  "user_data_dir": "output/chrome_profile",
-  "browser_channel": "chrome"
+  "output_csv": "output/players.csv"
 }
